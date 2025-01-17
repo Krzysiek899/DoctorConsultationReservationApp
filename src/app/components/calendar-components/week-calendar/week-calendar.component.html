@@ -1,0 +1,13 @@
+<div class="calendar-container">
+  <button class="previous-button" (click)="shiftDays(-1)">
+      <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class="days-container">
+    @for (day of days; track $index) {
+      <app-day-calendar [day] = day></app-day-calendar>
+    }
+  </div>
+  <button class="next-button" (click)="shiftDays(1)">
+      <mat-icon>arrow_forward</mat-icon>
+  </button>
+</div>

@@ -1,0 +1,44 @@
+.calendar-container, .days-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: 700px;
+}
+
+app-day-calendar{
+    width: 100%;
+}
+
+button{
+
+    display: grid;
+    place-items: center;
+    
+    background: none;
+    height: 100px;
+    width: 40px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.previous-button{
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 255, 0.1);
+    transform: scale(1.1);
+}
+
+button:active {
+    background-color: rgba(0, 0, 255, 0.2);
+    transform: scale(0.95);
+}
+
+button mat-icon {
+    font-size: 24px; /* Rozmiar ikony */
+    color: #333; /* Kolor ikony */
+}
+

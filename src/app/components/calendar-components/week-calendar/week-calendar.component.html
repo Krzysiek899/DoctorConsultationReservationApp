@@ -1,0 +1,9 @@
+<div class="calendar-container">
+  <button class="previous-button"></button>
+  <div class="days-container">
+    @for (day of days; track $index) {
+      <app-day-calendar [day] = day></app-day-calendar>
+    }
+  </div>
+  <button class="next-button"></button>
+</div>

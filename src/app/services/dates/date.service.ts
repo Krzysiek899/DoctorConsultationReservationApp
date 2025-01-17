@@ -6,41 +6,32 @@ import {Day} from '../../models/day.model';
 })
 export class DateService {
 
-  constructor() { }
-
-  public GetDays(): Day[] {
-    const today = new Date();
+  GetDays(startDate: Date): Day[] {
     const daysOfWeek: Day[] = [];
-
-    const dayOfWeek = today.getDay();
-    const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
-
-    let currentDay = new Date(today);
-    currentDay.setDate(today.getDate() - diffToMonday);
+    const currentDate = new Date(startDate);
 
     for (let i = 0; i < 7; i++) {
-      daysOfWeek.push(this.DateToDay(currentDay));
-      currentDay.setDate(currentDay.getDate() + 1);
+      daysOfWeek.push(this.DateToDay(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
     return daysOfWeek;
   }
 
-  private DateToDay(date: Date): Day {
+  DateToDay(date: Date): Day {
     const today = new Date();
-
-    const day: Day = {
+    return {
       day: date.getDate(),
-      dayOfWeek: date.getDay(),
+      dayOfWeek: this.getDayOfWeek(date.getDay()),
       month: date.getMonth() + 1,
       year: date.getFullYear(),
-      isCurrent:
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear()
+      isCurrent: today.toDateString() === date.toDateString(),
     };
+  }
 
-    return day;
+  getDayOfWeek(day: number): string {
+    const daysOfWeek = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+    return daysOfWeek[day];
   }
 
 }

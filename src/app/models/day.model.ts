@@ -1,6 +1,6 @@
 export interface Day {
   day: number;
-  dayOfWeek: number;
+  dayOfWeek: string;
   month: number;
   year: number;
   isCurrent: boolean;

@@ -1,1 +1,19 @@
-<p>day-calendar works!</p>
+<div class="day-container" [ngClass]="{'current-day': day.isCurrent}">
+  <header>
+    <div class="day-name"> {{day.dayOfWeek}} </div>
+    <div class="day-date"> {{ day.day }}-{{ day.month }}-{{ day.year }} </div>
+
+  </header>
+  <div class="day-body">
+    <div class="slot-container">
+      @for (slot of slots; track $index){
+        <div class="slot-box">
+          <div class="slot-label">
+            {{slot}}
+          </div>
+        </div>
+      }
+    </div>
+    <div *ngIf="day.isCurrent" class="current-hour-line" [ngStyle]="{ top: currentHourPosition + 'px' }"></div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+header{
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-name{
+  font-weight: bold;
+}
+
+.day-body {
+  width: 100%;
+  overflow-y: scroll;
+  max-height: 600px;
+  margin: 10px 0;
+  position: relative
+}
+
+.slot-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 90%;
+  position: relative
+}
+
+.current-hour-line {
+  position: absolute;
+  left: 0;
+  width: 90%;
+  height: 4px;
+  background-color: lightblue; /* Kolor linii */
+  z-index: 10;
+}
+
+.slot-box {
+  height: 50px;
+  border-top: 0.5px solid lightgray;
+  border-bottom: 0.5px solid lightgray;
+}
+
+.current-day{
+  header{
+    background-color: lightblue;
+  }
+}
+
+

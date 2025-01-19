@@ -1,6 +1,6 @@
 <div
   class="consultation"
-  [ngClass]="(consultation.type)"
+  [ngClass]="(getClass())"
   (mouseenter)="showDetails = true"
   (mouseleave)="showDetails = false"
 >

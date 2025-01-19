@@ -31,4 +31,19 @@ li{
   border-radius: 5px;
   background-color: white;
   color: black;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+
 }
+
+li:hover {
+  background-color: #007bff; /* Ładny niebieski */
+  color: white;
+  transform: translateY(-2px); /* Lekkie podniesienie */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+  text-decoration: none;
+  color: inherit;
+}
+

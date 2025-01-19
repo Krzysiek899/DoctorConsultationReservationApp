@@ -3,12 +3,14 @@ import {AuthService} from '../../../services/auth/auth.service';
 import {Observable} from 'rxjs';
 import {Router, RouterLink} from '@angular/router';
 import {AsyncPipe} from '@angular/common';
+import {MatAnchor} from '@angular/material/button';
 
 @Component({
   selector: 'app-menu-bar',
   imports: [
     RouterLink,
-    AsyncPipe
+    AsyncPipe,
+    MatAnchor
   ],
   templateUrl: './menu-bar.component.html',
   standalone: true,

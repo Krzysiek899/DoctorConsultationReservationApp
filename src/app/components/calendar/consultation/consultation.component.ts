@@ -17,6 +17,14 @@ export class ConsultationComponent {
 
   showDetails: boolean = false;
 
+  getClass() : string {
+    if (this.consultation.endTime < new Date()) {
+      return "past";
+    } else {
+      return this.consultation.type;
+    }
+  }
+
 
 
 }

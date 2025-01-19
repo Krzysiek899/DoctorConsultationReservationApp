@@ -1,5 +1,35 @@
-.calendar{
-  width: 90%;
-  height: 600px;
-  margin: auto;
+/* Ustawienie stylu dla głównej struktury */
+:root {
+  --menu-height: 60px; /* Możesz dostosować wysokość menu */
 }
+
+/* Globalne ustawienia */
+html, body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+app-menu-bar {
+  height: var(--menu-height);
+  flex-shrink: 0; /* Upewnij się, że menu nie zmniejszy swojej wysokości */
+}
+
+/* Main zajmuje całą dostępną przestrzeń pod menu */
+main.content {
+  display: flex; /* Użyj Flexbox */
+  justify-content: center; /* Centrowanie horyzontalne */
+  align-items: center; /* Centrowanie pionowe */
+  flex-grow: 1;
+  min-height: calc(100vh - var(--menu-height)); /* Wypełnij pozostałą przestrzeń pod menu */
+  padding: 1rem; /* Opcjonalne odstępy */
+  box-sizing: border-box; /* Uwzględnij padding w obliczeniach szerokości/wysokości */
+}
+
+/* Opcjonalne style dla wyśrodkowanej zawartości */
+main.content .centered {
+  text-align: center;
+  width: 100%;
+}
+

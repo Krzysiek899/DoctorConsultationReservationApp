@@ -1,1 +1,67 @@
-<p>register works!</p>
+<div class="register-container">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+    <h2>Register</h2>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" placeholder="Enter your email" />
+      <div class="error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        <small *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</small>
+        <small *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="password">Password</label>
+      <input id="password" formControlName="password" type="password" placeholder="Enter your password" />
+      <div class="error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        <small *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</small>
+        <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="repeatPassword">Repeat Password</label>
+      <input id="repeatPassword" formControlName="repeatPassword" type="password" placeholder="Repeat your password" />
+      <div class="error" *ngIf="registerForm.get('repeatPassword')?.invalid && registerForm.get('repeatPassword')?.touched">
+        <small *ngIf="registerForm.get('repeatPassword')?.errors?.['required']">Repeat Password is required.</small>
+        <small *ngIf="registerForm.hasError('passwordMismatch')">Passwords do not match.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="firstName">First Name</label>
+      <input id="firstName" formControlName="firstName" type="text" placeholder="Enter your first name" />
+      <div class="error" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+        <small *ngIf="registerForm.get('firstName')?.errors?.['required']">First name is required.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" formControlName="lastName" type="text" placeholder="Enter your last name" />
+      <div class="error" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+        <small *ngIf="registerForm.get('lastName')?.errors?.['required']">Last name is required.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="accountType">Account Type</label>
+      <select id="accountType" formControlName="accountType">
+        <option value="">Select account type</option>
+        <option value="doctor">Doctor</option>
+        <option value="patient">Patient</option>
+      </select>
+      <div class="error" *ngIf="registerForm.get('accountType')?.invalid && registerForm.get('accountType')?.touched">
+        <small *ngIf="registerForm.get('accountType')?.errors?.['required']">Account type is required.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="specialization">Specialization (optional)</label>
+      <input id="specialization" formControlName="specialization" type="text" placeholder="Enter your specialization" />
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid" class="submit-button">Register</button>
+  </form>
+</div>

@@ -1,28 +1,77 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {from, Observable} from 'rxjs';
-import { User } from '@firebase/auth-types';
+import {BehaviorSubject, from, map, Observable, switchMap} from 'rxjs';
+import {AngularFirestore} from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private userRoleSubject = new BehaviorSubject<string | null>(null); // Role użytkownika
+  userRole$ = this.userRoleSubject.asObservable(); // Observable do obserwacji roli użytkownika
 
-  constructor(private afAuth: AngularFireAuth) {}
+  isLoggedIn$: Observable<boolean>; // Status logowania
 
-  login(email: string, password: string): Observable<any> {
-    return from(this.afAuth.signInWithEmailAndPassword(email, password));
+  constructor(
+    private afAuth: AngularFireAuth,
+    private firestore: AngularFirestore
+  ) {
+    // Obserwuj stan logowania
+    this.isLoggedIn$ = this.afAuth.authState.pipe(
+      map(user => !!user)
+    );
+
+    // Pobierz role użytkownika przy zmianie stanu logowania
+    this.afAuth.authState
+      .pipe(
+        switchMap(user => {
+          if (user) {
+            return this.getUserRole(user.uid); // Pobierz rolę na podstawie UID
+          } else {
+            return [null]; // Brak użytkownika = brak roli
+          }
+        })
+      )
+      .subscribe(role => this.userRoleSubject.next(role));
   }
 
-  register(email: string, password: string): Observable<any> {
-    return from(this.afAuth.createUserWithEmailAndPassword(email, password));
+  // Rejestracja użytkownika
+  async register(email: string, password: string, role: string): Promise<void> {
+    const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
+    const userId = credential.user?.uid;
+
+    if (userId) {
+      // Dodaj użytkownika do Firestore z przypisaną rolą
+      await this.firestore.collection('users').doc(userId).set({
+        email,
+        role
+      });
+    }
   }
 
-  logout(): Observable<void> {
-    return from(this.afAuth.signOut());
+  // Logowanie
+  async login(email: string, password: string): Promise<void> {
+    await this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  get currentUser(): Observable<User | null> {
-    return from(this.afAuth.authState);
+  // Wylogowanie
+  async logout(): Promise<void> {
+    try {
+      await this.afAuth.signOut();
+      this.userRoleSubject.next(null); // Zresetuj rolę
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  }
+
+  // Pobierz rolę użytkownika z Firestore
+  private getUserRole(userId: string): Observable<string | null> {
+    return this.firestore
+      .collection('users')
+      .doc(userId)
+      .valueChanges()
+      .pipe(
+        map((user: any) => user?.role || null) // Pobierz rolę lub null
+      );
   }
 }

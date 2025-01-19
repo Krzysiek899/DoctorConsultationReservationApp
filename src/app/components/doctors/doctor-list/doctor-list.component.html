@@ -1,0 +1,9 @@
+<div class="doctor-list-container">
+  <ul>
+    @for (doctor of (doctors$ | async); track $index){
+      <li>
+        <app-doctor-element [doctor]="doctor"></app-doctor-element>
+      </li>
+    }
+  </ul>
+</div>

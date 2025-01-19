@@ -4,12 +4,12 @@ export interface Consultation {
   endTime: Date;
   doctorId: number;
   patientId: number;
-  type: ConsultationType;
+  type: string;
 }
 
-export enum ConsultationType {
-  General = 'General',
-  Therapy = 'Therapy',
-  CheckUp = 'CheckUp',
-  Emergency = 'Emergency'
-}
+// export enum ConsultationType {
+//   General = 'General',
+//   Therapy = 'Therapy',
+//   CheckUp = 'CheckUp',
+//   Emergency = 'Emergency'
+// }

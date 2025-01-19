@@ -28,18 +28,19 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
-      this.authService.login(email, password).subscribe({
-        next: () => {
-          // Po udanym logowaniu przekierowanie na stronę główną lub dashboard
-          //this.router.navigate(['/dashboard']);
-          alert("Sukces")
-        },
-        error: (error) => {
-          // Obsługuje błąd, jeśli logowanie nie powiedzie się
-          // this.errorMessage = error.message;
-          alert(error);
-        }
-      });
+      this.authService.login(email, password)
+        .then(() => {
+          // Akcja po pomyślnym zalogowaniu (np. nawigacja do strony głównej)
+          console.log('Login successful!');
+        })
+        .catch((error) => {
+          // Obsługa błędów logowania
+          console.error('Login failed:', error);
+          alert('Nie udało się zalogować. Sprawdź swoje dane.');
+        });
+    } else {
+      // Obsługa walidacji formularza
+      console.error('Formularz jest niepoprawny!');
     }
   }
 }

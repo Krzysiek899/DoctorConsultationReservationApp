@@ -1,1 +1,14 @@
-<p>consultation works!</p>
+<div
+  class="consultation"
+  [ngClass]="(consultation.type)"
+  (mouseenter)="showDetails = true"
+  (mouseleave)="showDetails = false"
+>
+
+  @if (showDetails){
+    <div  class="details">
+    <p>Typ: {{consultation.type}}</p>
+    </div>
+  }
+
+</div>

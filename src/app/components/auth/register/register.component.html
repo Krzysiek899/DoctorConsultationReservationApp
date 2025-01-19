@@ -30,6 +30,14 @@
     </div>
 
     <div class="form-field">
+      <label for="userName">User Name</label>
+      <input id="userName" formControlName="userName" type="text" placeholder="Enter your user name" />
+      <div class="error" *ngIf="registerForm.get('userName')?.invalid && registerForm.get('userName')?.touched">
+        <small *ngIf="registerForm.get('userName')?.errors?.['required']">Username is required.</small>
+      </div>
+    </div>
+
+    <div class="form-field">
       <label for="firstName">First Name</label>
       <input id="firstName" formControlName="firstName" type="text" placeholder="Enter your first name" />
       <div class="error" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
@@ -62,6 +70,6 @@
       <input id="specialization" formControlName="specialization" type="text" placeholder="Enter your specialization" />
     </div>
 
-    <button type="submit" [disabled]="registerForm.invalid" class="submit-button">Register</button>
+    <button type="submit" class="submit-button">Register</button>
   </form>
 </div>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../services/auth/auth.service';
 import {NgIf} from '@angular/common';
+import {AuthFireService} from '../../../services/auth/fire/auth-fire.service';
 
 @Component({
   selector: 'app-register',
@@ -16,11 +17,12 @@ import {NgIf} from '@angular/common';
 export class RegisterComponent {
   registerForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthFireService) {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       repeatPassword: ['', [Validators.required]],
+      userName: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       accountType: ['', [Validators.required]],
@@ -35,13 +37,14 @@ export class RegisterComponent {
         email,
         password,
         repeatPassword,
+        userName,
         firstName,
         lastName,
         accountType,
         specialization
       } = this.registerForm.value;
 
-      this.authService.register(email, password, accountType)
+      this.authService.register(email, userName, password, firstName, lastName, accountType, specialization)
     } else {
 
       this.registerForm.markAllAsTouched();

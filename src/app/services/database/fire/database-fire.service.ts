@@ -1,8 +1,20 @@
 import {inject, Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {Doctor} from '../../../models/doctor.model';
-import {collection, collectionData, Firestore, getDocs, query, where} from '@angular/fire/firestore';
+import {
+  collection,
+  collectionData,
+  doc,
+  docData,
+  Firestore,
+  getDocs,
+  query,
+  setDoc,
+  where
+} from '@angular/fire/firestore';
 import {Consultation} from '../../../models/consultation.model';
+import {UserwithRole} from '../../../models/user.model';
+import {Patient} from '../../../models/patient.model';
 
 ;
 
@@ -11,10 +23,45 @@ import {Consultation} from '../../../models/consultation.model';
 })
 export class DatabaseFireService {
 
-  store = inject(Firestore)
+  store = inject(Firestore);
 
   doctorsCollection = collection(this.store, 'doctors');
   consultationsCollection = collection(this.store, 'consultations');
+
+  addUser(userId: string, userData: UserwithRole): Promise<void> {
+    const userRef = doc(this.store, `users/${userId}`);
+    return setDoc(userRef, userData);
+  }
+
+  // Dodaj lekarza do `doctors`
+  addDoctor(doctorId: string, doctorData: Doctor): Promise<void> {
+    const doctorRef = doc(this.store, `doctors/${doctorId}`);
+    return setDoc(doctorRef, doctorData);
+  }
+
+  // Dodaj pacjenta do `patients`
+  addPatient(patientId: string, patientData: Patient): Promise<void> {
+    const patientRef = doc(this.store, `patients/${patientId}`);
+    return setDoc(patientRef, patientData);
+  }
+
+  // Pobierz dane użytkownika z `users`
+  getUser(userId: string): Observable<UserwithRole> {
+    const userRef = doc(this.store, `users/${userId}`);
+    return docData(userRef) as Observable<UserwithRole>;
+  }
+
+  // Pobierz dane lekarza z `doctors`
+  getDoctor(doctorId: string): Observable<Doctor> {
+    const doctorRef = doc(this.store, `doctors/${doctorId}`);
+    return docData(doctorRef) as Observable<Doctor>;
+  }
+
+  // Pobierz dane pacjenta z `patients`
+  getPatient(patientId: string): Observable<Patient> {
+    const patientRef = doc(this.store, `patients/${patientId}`);
+    return docData(patientRef) as Observable<Patient>;
+  }
 
 
   getDoctors(): Observable<Doctor[]> {

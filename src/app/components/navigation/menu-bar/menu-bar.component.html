@@ -1,12 +1,12 @@
 <nav>
   <h1>Consultation reservation app</h1>
   <ul>
-    @if ((isLoggedIn$ | async) === true){
-      @if ((userRole$ | async) === 'doctor'){
+    @if ((currentUser$ | async) !== null){
+      @if ((currentUser$ | async)?.role === 'doctor'){
         <li>
           <a routerLink="/doctor/calendar">Mój kalendarz</a>
         </li>
-      } @else if ((userRole$ | async) === 'patient'){
+      } @else if ((currentUser$ | async)?.role === 'patient'){
         <li>
           <a routerLink="/patient/consultations">Moje konsultacje</a>
         </li>

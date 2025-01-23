@@ -1,4 +1,13 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  SimpleChanges,
+  OnChanges,
+  ChangeDetectionStrategy,
+  AfterViewInit
+} from '@angular/core';
 import { Day } from '../../../models/day.model';
 import { AsyncPipe, NgClass, NgIf, NgStyle } from '@angular/common';
 import { DatabaseFireService } from '../../../services/database/fire/database-fire.service';
@@ -26,7 +35,7 @@ import {Router} from '@angular/router'; // Dodaj MatSnackBar
   styleUrls: ['./day-calendar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DayCalendarComponent implements OnInit, OnDestroy, OnChanges {
+export class DayCalendarComponent implements OnInit, OnDestroy, OnChanges{
   @Input({ required: true }) day!: Day;
   @Input() doctorId: string | undefined | null;
 
@@ -46,7 +55,6 @@ export class DayCalendarComponent implements OnInit, OnDestroy, OnChanges {
 
   dataLoaded = false; // Flaga wskazująca na załadowanie danych
 
-  private day$ = new Subject<Day>();
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -57,22 +65,26 @@ export class DayCalendarComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['day'] && this.day) {
-      this.day$.next(this.day);
+    if (changes['day'] && changes['day'].currentValue) {
+      console.log('Detected new day:', this.day);
+      if (this.userInfo) {
+        this.getContent(this.day, this.userInfo);
+      }
       this.setCurrentHour();
     }
   }
 
   ngOnInit(): void {
-    combineLatest([
-      this.authService.currentUser$,
-      this.day$.asObservable()
-    ]).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(([user, day]) => {
-      this.userInfo = user;
-      this.getContent(day, user);
-    });
+
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        this.userInfo = user;
+        if (this.day) {
+          this.getContent(this.day, user);
+        }
+      });
+
 
     this.generateTimes();
     this.setCurrentHour();
@@ -83,6 +95,9 @@ export class DayCalendarComponent implements OnInit, OnDestroy, OnChanges {
       }, 60000);
     }
   }
+
+
+
 
   ngOnDestroy(): void {
     if (this.intervalId) {
@@ -145,6 +160,8 @@ export class DayCalendarComponent implements OnInit, OnDestroy, OnChanges {
           this.absentSlots.clear();
           this.dataLoaded = true; // Ustaw flagę po załadowaniu danych
         });
+
+
     }
   }
 

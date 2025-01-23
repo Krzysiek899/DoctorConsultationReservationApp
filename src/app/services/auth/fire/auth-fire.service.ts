@@ -6,16 +6,17 @@ import {
   updateProfile,
   user
 } from '@angular/fire/auth';
-import {BehaviorSubject, from, Observable} from 'rxjs';
+import {BehaviorSubject, catchError, from, Observable, tap, throwError} from 'rxjs';
 import {DatabaseFireService} from '../../database/fire/database-fire.service';
 import {Doctor} from '../../../models/doctor.model';
 import {Patient} from '../../../models/patient.model';
 import {UserwithRole} from '../../../models/user.model';
+import {subscribe} from '@angular/fire/data-connect';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthFireService {
+export class AuthFireService  {
   firebaseAuth = inject(Auth);
   storeService = inject(DatabaseFireService);
 
@@ -24,22 +25,38 @@ export class AuthFireService {
   private currentUserSubject: BehaviorSubject<UserwithRole | null> = new BehaviorSubject<UserwithRole | null>(null);
   currentUser$: Observable<UserwithRole | null> = this.currentUserSubject.asObservable();
 
-  subscribe() {
-    // Subskrybuj zmiany w użytkowniku i aktualizuj currentUserSubject
-    this.user$.subscribe((firebaseUser) => {
-      if (firebaseUser) {
-        // Jeśli użytkownik jest zalogowany, pobierz dane użytkownika z bazy
-        this.storeService.getUser(firebaseUser.uid).subscribe((userData) => {
-          if (userData) {
-            this.currentUserSubject.next(userData);
-          }
-        });
-      } else {
-        // Jeśli użytkownik nie jest zalogowany, ustaw null
+  constructor() {
+    this.initializeUserSubscription();
+  }
+
+
+  private initializeUserSubscription() {
+    this.user$.subscribe({
+      next: (firebaseUser) => {
+        console.log('Auth State Changed:', firebaseUser);
+        if (firebaseUser != null) {
+          this.storeService.getUser(firebaseUser.uid).subscribe({
+            next: (userData) => {
+              console.log('Fetched User Data:', userData);
+              this.currentUserSubject.next(userData);
+            },
+            error: (error) => {
+              console.error('Error fetching user data:', error);
+              this.currentUserSubject.next(null);
+            }
+          });
+        } else {
+          console.log('User is logged out.');
+          this.currentUserSubject.next(null);
+        }
+      },
+      error: (error) => {
+        console.error('Error with user subscription:', error);
         this.currentUserSubject.next(null);
       }
     });
   }
+
 
   register(
     email: string,
@@ -107,14 +124,18 @@ export class AuthFireService {
   }
 
   logout(): Observable<void> {
-    const promise = signOut(this.firebaseAuth)
-      .then(() => {
-        console.log("user set to null");
-        console.log(this.user$);
-      })
-      .catch((error) => {
+    // Clear user state immediately to avoid stale data being used
+    this.currentUserSubject.next(null);
+
+    return from(signOut(this.firebaseAuth)).pipe(
+      tap(() => {
+        console.log("User is now logged out");
+      }),
+      catchError((error) => {
         console.error('Logout failed:', error);
-      });
-    return from(promise);
+        return throwError(error);
+      })
+    );
   }
+
 }

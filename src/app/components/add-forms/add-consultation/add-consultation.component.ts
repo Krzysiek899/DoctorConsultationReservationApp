@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {AsyncPipe, NgForOf} from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
+import {CartService} from '../../../services/cart/cart.service';
 
 @Component({
   selector: 'app-add-consultation',
@@ -42,7 +43,8 @@ export class AddConsultationComponent implements OnInit {
     private router: Router,
     private databaseService: DatabaseFireService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cartService: CartService
   ) {}
 
   ngOnInit() {
@@ -151,14 +153,14 @@ export class AddConsultationComponent implements OnInit {
         const endTime = new Date(this.startTime);
         endTime.setMinutes(endTime.getMinutes() + consultationLength);
 
-        // Sprawdzenie czy rezerwacja koliduje z zajętymi slotami
-        const requestedSlots = this.getTimeSlotsBetween(this.startTime, endTime);
-        const isOverlap = requestedSlots.some(slot => this.occupiedSlots.includes(slot));
-
-        if (isOverlap) {
-          this.snackBar.open('Wybrana długość konsultacji koliduje z innymi rezerwacjami.', 'Zamknij', { duration: 3000 });
-          return;
-        }
+        // // Sprawdzenie czy rezerwacja koliduje z zajętymi slotami
+        // const requestedSlots = this.getTimeSlotsBetween(this.startTime, endTime);
+        // const isOverlap = requestedSlots.some(slot => this.occupiedSlots.includes(slot));
+        //
+        // if (isOverlap) {
+        //   this.snackBar.open('Wybrana długość konsultacji koliduje z innymi rezerwacjami.', 'Zamknij', { duration: 3000 });
+        //   return;
+        // }
 
         const consultation: Consultation = {
           doctorId: this.doctorId,
@@ -174,14 +176,9 @@ export class AddConsultationComponent implements OnInit {
           status: 'ok', // Nowa konsultacja domyślnie jako "ok"
         };
 
-        this.databaseService.addConsultation(consultation)
-          .then(() => {
-            this.snackBar.open('Konsultacja została pomyślnie dodana!', 'OK', { duration: 3000 });
-            this.router.navigate(['/mycalendar']);
-          })
-          .catch(error => {
-            console.error('Błąd podczas dodawania konsultacji:', error);
-          });
+          this.cartService.addToCart(consultation);
+          this.snackBar.open('Konsultacja została pomyślnie dodana!', 'OK', { duration: 3000 });
+          this.router.navigate(['/cart']);
       }
     }
   }

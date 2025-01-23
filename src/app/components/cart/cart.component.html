@@ -1,0 +1,30 @@
+<div class="cart-container">
+  <h2>Twój koszyk konsultacji</h2>
+  <div *ngIf="cart.length > 0; else emptyCart">
+    <table>
+      <tr>
+        <th>Pacjent</th>
+        <th>Typ</th>
+        <th>Data</th>
+        <th>Godzina</th>
+        <th>Długość (min)</th>
+        <th>Akcje</th>
+      </tr>
+      <tr *ngFor="let item of cart">
+        <td>{{ item.firstName }} {{ item.lastName }}</td>
+        <td>{{ item.type }}</td>
+        <td>{{ item.startTime | date:'yyyy-MM-dd' }}</td>
+        <td>{{ item.startTime | date:'HH:mm' }}</td>
+        <td>{{ (item.endTime.getTime() - item.startTime.getTime()) / 60000 }}</td>
+        <td>
+          <button (click)="removeFromCart(item.id)">Usuń</button>
+        </td>
+      </tr>
+    </table>
+    <p><strong>Całkowity koszt:</strong> {{ totalCost }} zł</p>
+    <button (click)="onSubmit()">Zarezerwuj konsultacje</button>
+  </div>
+  <ng-template #emptyCart>
+    <p>Twój koszyk jest pusty.</p>
+  </ng-template>
+</div>

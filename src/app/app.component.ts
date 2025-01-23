@@ -14,12 +14,12 @@ import {DatabaseFireService} from './services/database/fire/database-fire.servic
   standalone: true,
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   title = 'DoctorConsultationReservationApp';
 
-  constructor(private authService: AuthFireService) {}
+  //constructor(private authService: AuthFireService) {}
 
-  ngOnInit() {
-    this.authService.subscribe();
-  }
+  // ngOnInit() {
+  //   this.authService.subscribe();
+  // }
 }

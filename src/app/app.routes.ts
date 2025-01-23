@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {AuthGuard} from '@angular/fire/auth-guard';
+import {AuthGuard, hasCustomClaim, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import {LoginComponent} from './components/auth/login/login.component';
 import {RegisterComponent} from './components/auth/register/register.component';
 import {DoctorListComponent} from './components/doctors/doctor-list/doctor-list.component';
@@ -7,8 +7,15 @@ import {WeekCalendarComponent} from './components/calendar/week-calendar/week-ca
 import {AddAvailabilityComponent} from './components/add-forms/add-availability/add-availability.component';
 import {AddAbsenceComponent} from './components/add-forms/add-absence/add-absence.component';
 import {AddConsultationComponent} from './components/add-forms/add-consultation/add-consultation.component';
+import {CartComponent} from './components/cart/cart.component';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectLoggedInToCalendar = () => redirectLoggedInTo(['mycalendar']);
+const onlyDoctors = () => hasCustomClaim('doctor');
+const onlyPatients = () => hasCustomClaim('patient');
 
 export const routes: Routes = [
+  // Dostępne dla wszystkich
   {
     path: '',
     pathMatch: 'full',
@@ -20,70 +27,71 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [AuthGuard], // Użytkownicy zalogowani zostaną przekierowani do mycalendar
+    data: { authGuardPipe: redirectLoggedInToCalendar }
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectLoggedInToCalendar }
   },
+
+  // Dostępne tylko dla zalogowanych użytkowników
   {
     path: 'mycalendar',
-    component: WeekCalendarComponent
+    component: WeekCalendarComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
+
+  // Tylko dla użytkowników z rolą lekarza
   {
     path: 'newavailability',
-    component: AddAvailabilityComponent
+    component: AddAvailabilityComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
   {
     path: 'newabsence',
-    component: AddAbsenceComponent
+    component: AddAbsenceComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
+
+  // Tylko dla użytkowników z rolą pacjenta
   {
     path: 'newconsultation',
-    component: AddConsultationComponent
-  },
-  {
-    path:'doctors/:doctorId',
-    component: WeekCalendarComponent,
+    component: AddConsultationComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
   {
     path: 'doctors/:doctorId/newconsultation',
-    component: AddConsultationComponent
+    component: AddConsultationComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
+  {
+    path: 'cart',
+    component: CartComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
+  },
+
+  // Dostęp do widoku konkretnego lekarza dla wszystkich
+  {
+    path: 'doctors/:doctorId',
+    component: WeekCalendarComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin }
+  },
+
+  // Przekierowanie dla nieznanych ścieżek
   {
     path: '**',
     redirectTo: ''
   }
-  // {
-  //   path: "newconsultation",
-  // }
-  // {
-  //   path: "basket",
-  //
-  // }
-
-]
-
-// export const routes: Routes = [
-//   // Widoki dla użytkowników niezalogowanych
-//   { path: '', component: PublicLayoutComponent, children: [
-//       { path: '', component: DoctorListComponent },
-//       { path: 'login', component: LoginComponent },
-//       { path: 'register', component: RegisterComponent }
-//     ]},
-//   // // Widoki dla zalogowanych lekarzy
-//   // { path: 'doctor', component: DoctorLayoutComponent, canActivate: [AuthGuard, DoctorGuard], children: [
-//   //     { path: 'calendar', component: DoctorCalendarComponent },
-//   //     { path: 'availability', component: DoctorAvailabilityComponent },
-//   //     { path: 'absences', component: DoctorAbsencesComponent }
-//   //   ]},
-//   // // Widoki dla zalogowanych pacjentów
-//   // { path: 'patient', component: PatientLayoutComponent, canActivate: [AuthGuard, PatientGuard], children: [
-//   //     { path: 'consultations', component: PatientConsultationsComponent },
-//   //     { path: 'doctors', component: DoctorListComponent }
-//   //   ]},
-//   // Strony błędów i przekierowania
-//   { path: 'unauthorized', component: UnauthorizedLayoutComponent },
-//   { path: '**', redirectTo: '' }
-// ];
+];
 

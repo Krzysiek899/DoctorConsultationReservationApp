@@ -1,0 +1,23 @@
+<div class="form-container">
+  <h2>Dodaj absencję</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="startDate">Początek</label>
+      <input id="startDate" formControlName="startDate" type="date">
+    </div>
+    <div class="form-field">
+      <label for="endDate">Koniec</label>
+      <input id="endDate" formControlName="endDate" type="date">
+    </div>
+    <div *ngIf="form.errors?.['startDateInPast']" class="error">
+      Data początku nie może być w przeszłości.
+    </div>
+    <div *ngIf="form.errors?.['endDateInPast']" class="error">
+      Data końca nie może być w przeszłości.
+    </div>
+    <div *ngIf="form.errors?.['dateRangeInvalid']" class="error">
+      Data końca musi być późniejsza lub równa dacie początku.
+    </div>
+    <button type="submit" class="submit-button" [disabled]="form.invalid">Dodaj</button>
+  </form>
+</div>

@@ -7,10 +7,14 @@ import { environment } from './environments/environment';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import {provideRouter} from '@angular/router';
 import {routes} from './app/app.routes';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+
 
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideAnimations(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),

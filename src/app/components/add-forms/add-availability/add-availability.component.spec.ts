@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublicLayoutComponent } from './public-layout.component';
+import { AddAvailabilityComponent } from './add-availability.component';
 
-describe('PublicLayoutComponent', () => {
-  let component: PublicLayoutComponent;
-  let fixture: ComponentFixture<PublicLayoutComponent>;
+describe('AddAvailabilityComponent', () => {
+  let component: AddAvailabilityComponent;
+  let fixture: ComponentFixture<AddAvailabilityComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PublicLayoutComponent]
+      imports: [AddAvailabilityComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PublicLayoutComponent);
+    fixture = TestBed.createComponent(AddAvailabilityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

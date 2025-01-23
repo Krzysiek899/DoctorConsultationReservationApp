@@ -61,4 +61,21 @@ app-consultation{
   height: 100%;
 }
 
+.available-slot {
+  background-color: #b3ffb3; /* Zielony dla dostępnych slotów */
+  cursor: pointer;
+}
+
+.absence-slot {
+  background-color: #ffb3b3; /* Czerwony dla nieobecności */
+  pointer-events: none; /* Brak możliwości kliknięcia */
+}
+
+.occupied-slot {
+  background-color: #ffcccb; /* Jasny czerwony dla zajętych slotów */
+  pointer-events: none; /* Uniemożliwienie kliknięcia */
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 

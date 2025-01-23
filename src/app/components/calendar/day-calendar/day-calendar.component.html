@@ -5,24 +5,37 @@
     <div class="consultation-counter">Ilość konsultacji: {{(consultations$ | async)?.length}}</div>
 
   </header>
-  <div class="day-body">
+  <div class="day-body" >
     <div class="slot-container">
-      @for (slot of slots; track $index){
-        <div class="slot-box">
-          <div class="slot-label">
-            {{slot}}
+<!--      @if (dataLoaded){-->
+        @for (slot of slots; track $index){
+          <div class="slot-box"  (click)="bookConsultation(slot)"
+               [ngClass]="{
+        'available-slot': isSlotAvailable(slot) && !isSlotOccupied(slot),
+          'absence-slot': isSlotAbsent(slot),
+          'occupied-slot': isSlotOccupied(slot)
+      }" >
+
+            <div class="slot-label">
+              {{slot}}
+            </div>
           </div>
-        </div>
-      }
-      @for (consultation of (consultations$ | async); track $index){
-        <app-consultation [consultation]="consultation"
-                          [ngStyle]="{
+        }
+
+        @for (consultation of (consultations$ | async); track $index){
+          <app-consultation [consultation]="consultation"
+                            [ngStyle]="{
                     'grid-row': this.calculateGridRows(consultation)[0] + ' / ' + (this.calculateGridRows(consultation)[1] + 1)
                   }">
-        </app-consultation>
+          </app-consultation>
 
-      }
+        }
+
+        <div *ngIf="day.isCurrent" class="current-hour-line" [ngStyle]="{ top: currentHourPosition + 'px' }"></div>
+<!--      } @else {-->
+<!--        Loading data...-->
+<!--      }-->
     </div>
-    <div *ngIf="day.isCurrent" class="current-hour-line" [ngStyle]="{ top: currentHourPosition + 'px' }"></div>
   </div>
 </div>
+

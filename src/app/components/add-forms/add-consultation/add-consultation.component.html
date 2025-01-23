@@ -1,0 +1,54 @@
+<div class="form-container">
+  <h2>Rezerwacja konsultacji</h2>
+  <h3>{{ formatDateString(startTime.toString()) }}</h3>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="length">Długość</label>
+      <select id="length" formControlName="length">
+        <option *ngFor="let option of (lengthOptions$|async)" [value]="option">
+          {{ option }} minut
+        </option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="type">Typ konsultacji</label>
+      <select id="type" formControlName="type">
+        <option *ngFor="let type of Object.values(ConsultationType)" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="firstName">Imię</label>
+      <input id="firstName" formControlName="firstName" type="text">
+    </div>
+
+    <div class="form-field">
+      <label for="lastName">Nazwisko</label>
+      <input id="lastName" formControlName="lastName" type="text">
+    </div>
+
+    <div class="form-field">
+      <label for="sex">Płeć</label>
+      <select id="sex" formControlName="sex">
+        <option value="male">Mężczyzna</option>
+        <option value="female">Kobieta</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="age">Wiek</label>
+      <input id="age" formControlName="age" type="number">
+    </div>
+
+    <div class="form-field">
+      <label for="info">Dodatkowe informacje</label>
+      <input id="info" formControlName="info" type="text">
+    </div>
+
+    <button type="submit" class="submit-button" [disabled]="form.invalid">Zarezerwuj</button>
+  </form>
+</div>

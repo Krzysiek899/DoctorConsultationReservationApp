@@ -1,0 +1,55 @@
+<div class="form-container">
+  <h2>Dodaj dostępność</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="toggle-container">
+      <label>
+        <input type="radio" formControlName="availabilityType" value="cykliczna"> Cykliczna
+      </label>
+      <label>
+        <input type="radio" formControlName="availabilityType" value="jednorazowa"> Jednorazowa
+      </label>
+    </div>
+
+    <div *ngIf="form.value.availabilityType === 'cykliczna'">
+      <div class="form-field">
+        <label for="startDate">Początek</label>
+        <input id="startDate" formControlName="startDate" type="date">
+      </div>
+      <div class="form-field">
+        <label for="endDate">Koniec</label>
+        <input id="endDate" formControlName="endDate" type="date">
+      </div>
+      <div class="form-field day-selection">
+        <div *ngFor="let day of weekDays">
+          <input type="checkbox" [value]="day" (change)="toggleDaySelection(day)"> {{ day }}
+        </div>
+      </div>
+      <div class="form-field">
+        <label >Zakres godzinowy</label>
+        <input id="startTime" formControlName="startTime" type="time">
+        <input id="endTime" formControlName="endTime" type="time">
+      </div>
+    </div>
+
+    <div *ngIf="form.value.availabilityType === 'jednorazowa'">
+      <div class="form-field">
+        <label for="singleDate">Data</label>
+        <input id="singleDate" formControlName="singleDate" type="date">
+      </div>
+      <div class="form-field">
+        <label for="singleStartTime">Czas początkowy</label>
+        <input id="singleStartTime" formControlName="singleStartTime" type="time">
+      </div>
+      <div class="form-field">
+        <label for="singleEndTime">Czas końcowy</label>
+        <input id="singleEndTime" formControlName="singleEndTime" type="time">
+      </div>
+    </div>
+
+    <div *ngIf="form.errors?.['dateRangeInvalid']" class="error">
+      Data końca musi być późniejsza od daty początku.
+    </div>
+
+    <button type="submit" class="submit-button" [disabled]="form.invalid">Dodaj</button>
+  </form>
+</div>

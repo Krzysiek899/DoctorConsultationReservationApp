@@ -4,7 +4,7 @@
   </button>
   <div class="days-container">
     @for (day of days; track $index) {
-      <app-day-calendar [day] = day></app-day-calendar>
+      <app-day-calendar [day] = day [doctorId]="paramValue"></app-day-calendar>
     }
   </div>
   <button class="next-button" (click)="shiftDays(1)">

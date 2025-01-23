@@ -1,48 +1,24 @@
-/* Kontener listy lekarzy */
 .doctor-list-container {
-  width: 100%;
-  padding: 20px;
-  background-color: #f4f4f4; /* Jasne tło */
-  border-radius: 10px;
-  box-sizing: border-box;
+  max-height: 400px; /* Adjust height as needed */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 300px; /* Adjust width as needed */
+  margin: 0 auto;
 }
 
-ul {
+.doctor-list-container ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px; /* Odstęp między elementami */
 }
 
-li {
-  flex: 1 1 calc(33.33% - 20px); /* 3 elementy na rząd w zależności od dostępnej szerokości */
-  margin-bottom: 20px;
+.doctor-list-container li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  li {
-    flex: 1 1 calc(50% - 20px); /* Dwa elementy na rząd na mniejszych ekranach */
-  }
-}
-
-@media (max-width: 480px) {
-  li {
-    flex: 1 1 100%; /* Jeden element na rząd na małych ekranach */
-  }
-}
-
-app-doctor-element {
-  width: 100%;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-app-doctor-element:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.doctor-list-container li:last-child {
+  border-bottom: none;
 }

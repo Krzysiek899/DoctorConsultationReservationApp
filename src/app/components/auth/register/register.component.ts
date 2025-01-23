@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {AuthService} from '../../../services/auth/auth.service';
 import {NgIf} from '@angular/common';
 import {AuthFireService} from '../../../services/auth/fire/auth-fire.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ import {AuthFireService} from '../../../services/auth/fire/auth-fire.service';
 export class RegisterComponent {
   registerForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthFireService) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthFireService, private router: Router) {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -44,7 +45,9 @@ export class RegisterComponent {
         specialization
       } = this.registerForm.value;
 
-      this.authService.register(email, userName, password, firstName, lastName, accountType, specialization)
+      this.authService.register(email, userName, password, firstName, lastName, accountType, specialization).subscribe(
+        ()=> this.router.navigateByUrl('/doctors')
+      )
     } else {
 
       this.registerForm.markAllAsTouched();

@@ -65,6 +65,7 @@ export class AuthFireService {
     ).then((response) => {
       const userId = response.user.uid;
       const userData: UserwithRole = {
+        userId,
         email,
         username,
         role,
@@ -75,6 +76,7 @@ export class AuthFireService {
       // Dodaj szczegółowe dane w zależności od roli
       if (role === 'doctor') {
         const doctorData: Doctor = {
+          userId,
           firstName,
           lastName,
           specialization: specialization || '',

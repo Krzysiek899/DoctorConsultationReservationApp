@@ -1,16 +1,21 @@
 import { Routes } from '@angular/router';
 import {AuthGuard} from '@angular/fire/auth-guard';
-import {PublicLayoutComponent} from './layouts/public-layout/public-layout.component';
 import {LoginComponent} from './components/auth/login/login.component';
 import {RegisterComponent} from './components/auth/register/register.component';
 import {DoctorListComponent} from './components/doctors/doctor-list/doctor-list.component';
-import {UnauthorizedLayoutComponent} from './layouts/unauthorized-layout/unauthorized-layout.component';
 import {WeekCalendarComponent} from './components/calendar/week-calendar/week-calendar.component';
+import {AddAvailabilityComponent} from './components/add-forms/add-availability/add-availability.component';
+import {AddAbsenceComponent} from './components/add-forms/add-absence/add-absence.component';
+import {AddConsultationComponent} from './components/add-forms/add-consultation/add-consultation.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    redirectTo: 'doctors',
+  },
+  {
+    path: 'doctors',
     component: DoctorListComponent
   },
   {
@@ -22,9 +27,41 @@ export const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'calendar',
+    path: 'mycalendar',
     component: WeekCalendarComponent
+  },
+  {
+    path: 'newavailability',
+    component: AddAvailabilityComponent
+  },
+  {
+    path: 'newabsence',
+    component: AddAbsenceComponent
+  },
+  {
+    path: 'newconsultation',
+    component: AddConsultationComponent
+  },
+  {
+    path:'doctors/:doctorId',
+    component: WeekCalendarComponent,
+  },
+  {
+    path: 'doctors/:doctorId/newconsultation',
+    component: AddConsultationComponent
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
+  // {
+  //   path: "newconsultation",
+  // }
+  // {
+  //   path: "basket",
+  //
+  // }
+
 ]
 
 // export const routes: Routes = [

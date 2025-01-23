@@ -4,20 +4,34 @@
     @if ((currentUser$ | async) !== null){
       @if ((currentUser$ | async)?.role === 'doctor'){
         <li>
-          <a routerLink="/doctor/calendar">Mój kalendarz</a>
+          <a routerLink="/mycalendar">Mój kalendarz</a>
+        </li>
+        <li>
+          <a routerLink="/newavailability">Dodaj dostępność</a>
+        </li>
+        <li>
+          <a routerLink="/newabsence">Dodaj absencję</a>
         </li>
       } @else if ((currentUser$ | async)?.role === 'patient'){
+
         <li>
-          <a routerLink="/patient/consultations">Moje konsultacje</a>
+          <a routerLink="/doctors">Lista lekarzy</a>
+        </li>
+
+        <li>
+          <a routerLink="/mycalendar">Moje konsultacje</a>
         </li>
       }
       <li>
         <a (click)="logout()">Wyloguj się</a>
       </li>
+      <div class="username">
+        {{(currentUser$ | async)?.username}}
+      </div>
 
     } @else {
       <li>
-        <a routerLink="/">Lista lekarzy</a>
+        <a routerLink="/doctors">Lista lekarzy</a>
       </li>
       <li>
         <a routerLink="/login">Zaloguj się</a>

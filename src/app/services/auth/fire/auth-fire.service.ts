@@ -6,12 +6,12 @@ import {
   updateProfile,
   user
 } from '@angular/fire/auth';
-import {BehaviorSubject, catchError, from, Observable, tap, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, from, Observable, of, tap, throwError} from 'rxjs';
 import {DatabaseFireService} from '../../database/fire/database-fire.service';
 import {Doctor} from '../../../models/doctor.model';
 import {Patient} from '../../../models/patient.model';
 import {UserwithRole} from '../../../models/user.model';
-import {subscribe} from '@angular/fire/data-connect';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -137,5 +137,18 @@ export class AuthFireService  {
       })
     );
   }
+
+  hasRole(expectedRole: 'doctor' | 'patient'): Observable<boolean> {
+    return this.currentUser$.pipe(
+      map(user => {
+        if (!user) {
+          return false;
+        }
+        return user.role === expectedRole;
+      }),
+      catchError(() => of(false))
+    );
+  }
+
 
 }

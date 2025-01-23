@@ -8,11 +8,11 @@ import {AddAvailabilityComponent} from './components/add-forms/add-availability/
 import {AddAbsenceComponent} from './components/add-forms/add-absence/add-absence.component';
 import {AddConsultationComponent} from './components/add-forms/add-consultation/add-consultation.component';
 import {CartComponent} from './components/cart/cart.component';
+import {roleGuard} from './role.guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToCalendar = () => redirectLoggedInTo(['mycalendar']);
-const onlyDoctors = () => hasCustomClaim('doctor');
-const onlyPatients = () => hasCustomClaim('patient');
+
 
 export const routes: Routes = [
   // Dostępne dla wszystkich
@@ -46,46 +46,38 @@ export const routes: Routes = [
     data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
 
-  // Tylko dla użytkowników z rolą lekarza
+  // Trasy dostępne tylko dla lekarzy
   {
     path: 'newavailability',
     component: AddAvailabilityComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    canActivate: [AuthGuard, roleGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, role: 'doctor' }
   },
   {
     path: 'newabsence',
     component: AddAbsenceComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    canActivate: [AuthGuard, roleGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, role: 'doctor' }
   },
 
-  // Tylko dla użytkowników z rolą pacjenta
-  {
-    path: 'newconsultation',
-    component: AddConsultationComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
-  },
+  // Trasy dostępne tylko dla pacjentów
   {
     path: 'doctors/:doctorId/newconsultation',
     component: AddConsultationComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    canActivate: [AuthGuard, roleGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, role: 'patient' }
+  },
+  {
+    path: 'doctors/:doctorId',
+    component: WeekCalendarComponent,
+    canActivate: [AuthGuard, roleGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, role: 'patient'}
   },
   {
     path: 'cart',
     component: CartComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
-  },
-
-  // Dostęp do widoku konkretnego lekarza dla wszystkich
-  {
-    path: 'doctors/:doctorId',
-    component: WeekCalendarComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    canActivate: [AuthGuard, roleGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, role: 'patient' }
   },
 
   // Przekierowanie dla nieznanych ścieżek
